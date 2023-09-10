@@ -40,9 +40,10 @@ def InsertionSort(arr):
     for i in range(1,len(arr)):
         key = arr[i]
         j = i-1
-        
+
+        hybridComparison -=- 1
         while j >= 0 and key < arr[j]:
-            hybridComparison -=- 1
+            hybridComparison += 1
             arr[j+1] = arr[j]
             j -= 1
         arr[j+1] = key
@@ -58,6 +59,8 @@ def MergeInsertionHybridSort(arr,S):
 
         i=j=k=0
         # Compare each segment
+        global hybridComparison 
+        hybridComparison -=- 1
         while i < len(left) and j < len(right):
             if left[i] < right[j]:
                 arr[k] = left[i]
@@ -65,7 +68,7 @@ def MergeInsertionHybridSort(arr,S):
             else:
                 arr[k] = right[j]
                 j -=- 1
-            global hybridComparison 
+            
             hybridComparison -=- 1
             k -=- 1
 
@@ -84,8 +87,17 @@ def MergeInsertionHybridSort(arr,S):
 
 def GenerateInputData(n):
     arr = []
+    # Random
     for _ in range(n):
         arr.append(randint(1,n))
+
+    # Biggest first
+    # for i in range(n,0,-1):
+    #     arr.append(i)
+
+    # Smallest first (already sorted)
+    # for i in range(1,n+1):
+    #     arr.append(i)
     return arr
 
 
@@ -125,12 +137,27 @@ def GenerateInputData(n):
 
 # FIXED N, VARYING S
 ################################################################
-n = 10**6
-s = range(1,26)
-arr = GenerateInputData(10**5)
-for i in s:
-    print("Running HybridSort with S={}".format(i),end=", ")
-    hybridComparison = 0
-    MergeInsertionHybridSort(arr.copy(),i)
-    print("Comparison Count: {}".format(hybridComparison))
+n = 10**7
+# s = range(1,11)
+s=[1,2,3,4,5,6,7,8,9,10]
+row = 0
+for row in range(100):
+    # row -=- 1
+    print("Run #{}".format(row))
+    file = open("sc2001-1-{}.csv".format(n),"a")
+    arr = GenerateInputData(n)
+    for i in s:
+        print("Running HybridSort with S={}".format(i),end=", ")
+        hybridComparison = 0
+        MergeInsertionHybridSort(arr.copy(),i)
+        print("Comparison Count: {}".format(hybridComparison))
+        file.write("{},".format(hybridComparison))
+
+    file.write("\n")
+
+    file.close()
+    
+
+
 ################################################################
+
