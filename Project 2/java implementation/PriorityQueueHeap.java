@@ -110,7 +110,4 @@ public class PriorityQueueHeap implements PriorityQueue {
         this.heapArray[j].value = tempValue; // O(1)
         this.heapArray[j].priority = tempPriority; // O(1)
     }
-
-   
-    
 }

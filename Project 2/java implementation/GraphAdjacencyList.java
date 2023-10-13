@@ -57,6 +57,7 @@ class GraphAdjacencyList implements Graph{
     }
 
     public void Solve(int source){
+
         int[] distances = new int[this.vertexCount]; // O(1)
         int[] S = new int[this.vertexCount]; // O(1)
         PriorityQueueHeap priorityQueue = new PriorityQueueHeap(this.vertexCount); // O(V)

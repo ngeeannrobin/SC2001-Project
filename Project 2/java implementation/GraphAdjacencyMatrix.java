@@ -65,6 +65,7 @@ class GraphAdjacencyMatrix implements Graph{
                 }
             }
         }
+      
         if (debugging){
             System.out.println("Solved!");
             for (int i=0; i<this.vertexCount; i++){
