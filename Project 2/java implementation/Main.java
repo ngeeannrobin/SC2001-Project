@@ -7,10 +7,34 @@ public class Main{
     static int vertexCount = 10_000;
     static String csvFilePath = "./graphFiles/"+"v10000e25000000.csv";
     static int iterations = 10;
+    static boolean debugging = false;
+
 
 
     public static void main(String[] args)
     {
+        System.out.printf("Creating graph with %d vertices.\n", vertexCount);
+
+        // Swap between these two lines to test each structure.
+        // Graph g = new GraphAdjacencyMatrix(vertexCount);
+        Graph g = new GraphAdjacencyList(vertexCount);
+
+        // quick test to check if algorithm works
+        if (debugging){
+            g.AddEdge(0,2,1);
+            g.AddEdge(0,3,10);
+            g.AddEdge(0,7,6);
+            g.AddEdge(1,7,4);
+            g.AddEdge(1,9,3);
+            g.AddEdge(2,5,6);
+            g.AddEdge(3,4,3);
+            g.AddEdge(3,5,7);
+            g.AddEdge(5,7,7);
+            g.AddEdge(6,8,9);
+            g.Solve(0);
+            return;
+        }
+
         // Scanner to read csv file.
         Scanner scanner;
         try{
@@ -20,19 +44,8 @@ public class Main{
             return;
         }
 
-        System.out.printf("Creating graph with %d vertices.\n", vertexCount);
-
-        // Swap between these two lines to test each structure.
-        // Graph g = new GraphAdjacencyMatrix(vertexCount);
-        Graph g = new GraphAdjacencyList(vertexCount);
-
-
-
-        for (int i=0; i<25; i++){
-            // Load 1,000,000 edges at a time
-            LoadEdges(scanner,g,1_000_000);
-            System.out.printf("%d: ", edgeCount);
-
+        for (int i=0; i<25+1; i++){
+            // System.out.printf("%d: ", edgeCount);
             // Run the Dijkstra algorithm multiple times, take the mean time elapsed.
             long elapsed = 0;
             for (int j=0; j<iterations; j++){
@@ -42,6 +55,9 @@ public class Main{
                 elapsed += end-start;
             }
             System.out.printf("%.2f\n", (float)elapsed/iterations);
+          
+            // Load 1,000,000 edges at a time
+            LoadEdges(scanner,g,1_000_000);
         }
         scanner.close();
     }

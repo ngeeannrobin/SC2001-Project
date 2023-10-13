@@ -39,35 +39,37 @@ class GraphAdjacencyMatrix implements Graph{
     }
 
     public void Solve(int source){
-        int[] distances = new int[this.vertexCount];
-        int[] S = new int[this.vertexCount];
-        PriorityQueueArray priorityQueue = new PriorityQueueArray(this.vertexCount);
+        int[] distances = new int[this.vertexCount]; // O(1)
+        int[] S = new int[this.vertexCount]; // O(1)
+        PriorityQueueArray priorityQueue = new PriorityQueueArray(this.vertexCount); // O(V)
         
-        Arrays.fill(distances, Integer.MAX_VALUE);
-        distances[source] = 0;
-        for (int v=0; v<this.vertexCount; v++)
+        Arrays.fill(distances, Integer.MAX_VALUE); // O(V)
+        distances[source] = 0; // O(1)
+        for (int v=0; v<this.vertexCount; v++) //O(V)
             priorityQueue.Enqueue(v,distances[v]);
+        // priorityQueue.Enqueue(source,distances[source]); // O(1)
 
-        int u;
-        while (!priorityQueue.IsEmpty()){
-            u = priorityQueue.Dequeue();
-            S[u] = 1;
+        int u; // O(1)
+        while (!priorityQueue.IsEmpty()){ // O(V)
+            u = priorityQueue.Dequeue(); // O(V)
+            S[u] = 1; // O(1)
 
-            for (int v=0; v<this.vertexCount; v++){
+            for (int v=0; v<this.vertexCount; v++){ // O(V)
                 // Vertext v is adjacent to u
-                if (this.adjMatrix[u][v] != 0){
-                    if (S[v] != 1 && distances[v] > distances[u] + this.adjMatrix[u][v]){
-                        priorityQueue.Remove(v);
-                        distances[v] = distances[u] + this.adjMatrix[u][v];
-                        priorityQueue.Enqueue(v,distances[v]);
+                if (this.adjMatrix[u][v] != 0){ // O(1)
+                    if (S[v] != 1 && distances[v] > distances[u] + this.adjMatrix[u][v]){  // O(1)
+                        priorityQueue.Remove(v); // O(1)
+                        distances[v] = distances[u] + this.adjMatrix[u][v]; // O(1)
+                        priorityQueue.Enqueue(v,distances[v]); // O(1)
                     }
                 }
             }
         }
+      
         if (debugging){
             System.out.println("Solved!");
             for (int i=0; i<this.vertexCount; i++){
-                System.out.printf("Distance from %d to %d: %d ", source, i, distances[i]);
+                System.out.printf("Distance from %d to %d: %d\n", source, i, distances[i]);
             }
         }
     }

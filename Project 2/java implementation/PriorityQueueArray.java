@@ -2,73 +2,68 @@ public class PriorityQueueArray implements PriorityQueue {
     private int size;
     private int MAX_SIZE;
 
-    private Item[] queueArray;
+    private int[] queueArray;
 
+    // O(V)
     public PriorityQueueArray(int maxSize){
-        this.MAX_SIZE = maxSize;
-        this.size = 0;
+        this.MAX_SIZE = maxSize; // O(1)
+        this.size = 0; // O(1)
+        this.queueArray = new int[maxSize]; // O(1)
 
-        this.queueArray = new Item[maxSize];
-        // reducing Instantiation overhead by filling up array with Item objects, then only changing their values;
-        for (int i=0; i<maxSize; i++){
-            this.queueArray[i] = new Item();
+        for (int i=0; i<maxSize; i++){ // O(V)
+            this.queueArray[i] = Integer.MAX_VALUE; // O(1)
         }
+        
     }
 
+    // O(1)
     public boolean IsEmpty(){
-        return this.size==0;
+        return this.size==0; // O(1)
     }
 
+    // O(1)
     public void Enqueue(int value, int priority){
-        this.queueArray[this.size].value = value;
-        this.queueArray[this.size].priority = priority;
-        this.size -=- 1;
+        // priority already assigned 
+        if (this.queueArray[value] != Integer.MAX_VALUE) return; // O(1)
+
+        this.queueArray[value] = priority; // O(1)
+        this.size -=- 1; // O(1)
     }
 
+    // O(V)
     public int Dequeue() {
 
-        if (this.IsEmpty()) return -1;
+        if (this.IsEmpty()) return -1; // O(1)
 
-        int lowestIndex = this.Peek();
-        int returnValue = this.queueArray[lowestIndex].value;
+        int lowestValue = this.Peek(); // O(V)
 
-        // shift elements in array;
-        for (int i=lowestIndex; i<this.size-1; i++){
-            this.queueArray[i].value = this.queueArray[i+1].value;
-            this.queueArray[i].priority = this.queueArray[i+1].priority;
-        }
+        // reset priority
+        this.queueArray[lowestValue] = Integer.MAX_VALUE; // O(1)
 
-        this.size +=- 1;
-        return returnValue;
+        this.size +=- 1; // O(1)
+        return lowestValue; // O(1)
     }
 
+    // doesnt check for if value's value is unassigned, not necessary if carefully used.
+    // O(1)
     public void Remove(int value){
-        boolean found = false;
-        for (int i=0; i<this.size-1; i++){
-            found = found || this.queueArray[i].value == value;
-            if (found){
-                this.queueArray[i].value = this.queueArray[i+1].value;
-                this.queueArray[i].priority = this.queueArray[i+1].priority;
-            }
-                
-        }
-        if (found)
-            this.size +=- 1;
+        this.queueArray[value] = Integer.MAX_VALUE;
+        this.size +=- 1;
+
     }
 
-    // Return index with lowest priority
+    // O(V)
     private int Peek(){
-        int lowestPriority = this.queueArray[0].priority;
-        int index = 0;
+        int lowestPriority = this.queueArray[0]; // O(1)
+        int lowestValue = 0; // O(1)
 
-        for (int i=1; i<this.size; i++){
-            if (this.queueArray[i].priority < lowestPriority){
-                lowestPriority = this.queueArray[i].priority;
-                index = i;
+        for (int i=1; i<this.MAX_SIZE; i++){ // O(V)
+            if (this.queueArray[i] < lowestPriority){ // O(1)
+                lowestPriority = this.queueArray[i]; // O(1)
+                lowestValue = i; // O(1)
             }
         }
-        return index;
-
+        return lowestValue; // O(1)
     }
     
 }

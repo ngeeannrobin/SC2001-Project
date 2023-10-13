@@ -17,10 +17,6 @@ class GraphAdjacencyList implements Graph{
 
     public GraphAdjacencyList(int vertexCount){
         this.vertexCount = vertexCount;
-        // this.adjArray = new List<ArrayList>[vertexCount];
-        // for (int v=0; v<vertexCount; v++){
-        //     this.adjArray[v] = new ArrayList<Edge>();
-        // }
         this.adjArray = new ArrayList<ArrayList<Edge>>();
         for (int v=0; v<vertexCount; v++){
             this.adjArray.add(new ArrayList<Edge>());
@@ -61,25 +57,26 @@ class GraphAdjacencyList implements Graph{
     }
 
     public void Solve(int source){
-        int[] distances = new int[this.vertexCount];
-        int[] S = new int[this.vertexCount];
-        PriorityQueueArray priorityQueue = new PriorityQueueArray(this.vertexCount);
+
+        int[] distances = new int[this.vertexCount]; // O(1)
+        int[] S = new int[this.vertexCount]; // O(1)
+        PriorityQueueHeap priorityQueue = new PriorityQueueHeap(this.vertexCount); // O(V)
         
-        Arrays.fill(distances, Integer.MAX_VALUE);
-        distances[source] = 0;
-        for (int v=0; v<this.vertexCount; v++)
-            priorityQueue.Enqueue(v,distances[v]);
+        Arrays.fill(distances, Integer.MAX_VALUE); // O(V)
+        distances[source] = 0;  // O(1)
+        for (int v=0; v<this.vertexCount; v++) // O(V)
+            priorityQueue.Enqueue(v,distances[v]);  // O(logV)
 
-        int u;
-        while (!priorityQueue.IsEmpty()){
-            u = priorityQueue.Dequeue();
-            S[u] = 1;
+        int u; // O(1)
+        while (!priorityQueue.IsEmpty()){ // O(V)
+            u = priorityQueue.Dequeue(); // O(logV)
+            S[u] = 1;// O(1)
 
-            for (Edge edge : this.adjArray.get(u)){
+            for (Edge edge : this.adjArray.get(u)){ // O(E) : O(1)
                 if (S[edge.adj] != 1 && distances[edge.adj] > distances[u] + edge.weight){
-                    priorityQueue.Remove(edge.adj);
-                    distances[edge.adj] = distances[u] + edge.weight;
-                    priorityQueue.Enqueue(edge.adj,distances[edge.adj]);
+                    priorityQueue.Remove(edge.adj); // O(logV)
+                    distances[edge.adj] = distances[u] + edge.weight; // O(1)
+                    priorityQueue.Enqueue(edge.adj,distances[edge.adj]); // O(logV)
                 }
             }
         }
@@ -87,7 +84,7 @@ class GraphAdjacencyList implements Graph{
         if (debugging){
             System.out.println("Solved!");
             for (int i=0; i<this.vertexCount; i++){
-                System.out.printf("Distance from %d to %d: %d ", source, i, distances[i]);
+                System.out.printf("Distance from %d to %d: %d\n", source, i, distances[i]);
             }
         }
 
